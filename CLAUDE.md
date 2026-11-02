@@ -1,7 +1,7 @@
 # EEF211 EDT — "Devre Şehri" çalışma oyunu
 
 Ders: İTÜ EHB/EEF 211 Elektrik Devre Teorisi (kaynak kitap: Chua–Desoer–Kuh, *Linear and Nonlinear Circuits*).
-Kullanıcı öğrenci; dili **Türkçe**. 1. ara sınav: **9 Kasım 2026**.
+Kullanıcı öğrenci; dili **Türkçe**.
 
 ## Dosyalar
 - `index.html` — tek dosyalık, bağımlılıksız interaktif ders oyunu (HTML + CSS + vanilla JS, ~2400 satır). Tüm iş burada.
@@ -24,7 +24,7 @@ Kullanıcı öğrenci; dili **Türkçe**. 1. ara sınav: **9 Kasım 2026**.
    - Hazır görev üreticileri: `chainTask({fig(svg,k), steps})` (sınav sorusu adım adım; adım `{q, opts+a}` ya da `{q, labels, ans, tol?, anyOrder?, chip, ok, hint}`), `matrixEditor` (0/1/−1 hücreli matris doldurma), `treeTask`, `fundLoopTask`, `fundCutTask`, `runQuiz`.
    - Çizim yardımcıları: `plotter({x0,y0,w,h,xr,yr,xl,yl,step,ystep,id})` → `{base, fn, pl, dot, vl, hl, txt}`; devre sembolleri `SC.{w,dot,resV,resH,bat,src,nl,arr,t}`, ayrıca `dia` (bağımlı kaynak elması), `term`, `badge`, `opamp`, `twoPort`.
    - Lineer cebir yardımcıları: `rankOf`, `matInv`, `matMul`, `matT`, `det`, `frac` (kesir yazımı), `mxShow` (±1/0 matris), `mxN` (sayısal/kesirli matris), `matH`/`colH` (HTML matris/vektör).
-   - **HARİTA**: `renderMap()`; harita 1000×820 koordinat; `pos` yüzde (y × 8.2). 3 sıra durak: sıra 1 y≈18–23, sıra 2 y≈46–50, sıra 3 y≈77–84.
+   - **HARİTA**: `renderMap()`; harita 1000×820 koordinat; `pos` yüzde (y × 8.2). 3 sıra durak: sıra 1 y≈18–23, sıra 2 y≈46–50, sıra 3 y≈77–85 (6 durak: x 9, 26, 43, 60, 77, 93; sonuncusu "soon"). Yeni ders eklenince 4. sıra gerekir: harita yüksekliğini artır, mevcut y'leri yeniden ölçekle.
    - Hash ile doğrudan açma: `index.html#c12-3` (bölüm c12, adım 3; adımlar 0'dan).
 
 ## Bölümler (CHAPTERS sırası = haritadaki yol)
@@ -44,6 +44,7 @@ Kullanıcı öğrenci; dili **Türkçe**. 1. ara sınav: **9 Kasım 2026**.
 | c12 | İşlemsel Kuvvetlendirici (ideal model, bölgeler Mi+Nv=w, buffer, geri besleme) | Ders 8 sl. 8–17 |
 | c13 | Lineer Cebir Köprüsü (N(A), rank–sıfırlık, bağımsızlık, Q = A_T⁻¹A, diklik/Tellegen, özet tablo) | kullanıcı isteği |
 | c14 | Düğüm Gerilimleri Yöntemi (Ĝ = A G_d Aᵀ, slayt 20 sorusu) | Ders 8 sl. 18–20 |
+| soon | "Devamı Gelecek…" durağı (`soon:true`, adımsız; tıklanınca `showSoon()` modalı). **Her zaman dizinin en sonunda kalmalı**; yeni bölümleri bunun önüne ekle ve `pos`'unu kaydır. | — |
 
 Slayt sorularının doğrulanmış cevapları (yeniden hesaplamaya gerek yok):
 - Ders 7 sl.9 (a) G = [[1.5, −1], [−1, 1.5]]; (b) G = [[5/6, −1/3], [5/3, 5/6]].

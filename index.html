@@ -258,6 +258,13 @@ table.mx{border-collapse:separate;border-spacing:4px;margin:0 auto}
 .tbl{display:block;overflow-x:auto;max-width:100%;width:max-content}
 #stage{min-width:0}
 
+/* ---------- devamı gelecek ---------- */
+.soonstop .disc{background:repeating-linear-gradient(45deg,#fff,#fff 8px,#fff6d9 8px,#fff6d9 16px);border-style:dashed;border-color:#ffd36e;animation:bob 2.6s ease-in-out infinite}
+.soonstop .lbl{background:#fff6d9}
+.soonDots{color:#e0a400!important;letter-spacing:4px;font-weight:900}
+.mcard.soon p{font-weight:700;color:var(--soft);line-height:1.55;margin:8px 0}
+.mcard.soon p b{color:#6b4fd8}
+
 /* ---------- mobil ---------- */
 @media (max-width:860px){
   .lmain{flex-direction:column;align-items:stretch;padding:10px;gap:10px}
@@ -299,7 +306,6 @@ table.mx{border-collapse:separate;border-spacing:4px;margin:0 auto}
     <div>
       <h1 id="mapTitle">Devre Şehri</h1>
       <p id="mapSub">Eli ile Elektrik Devrelerinin Temelleri · EHB 211 · Ders 1–8</p>
-      <div class="examtag" id="examTag">📅 1. Ara sınav: 9 Kasım 2026</div>
     </div>
   </div>
   <div class="mapbox" id="mapbox"></div>
@@ -343,7 +349,6 @@ document.title=L_('Devre Şehri — Eli ile Elektrik Devreleri','Circuit City �
 (function staticText(){const q=s=>document.querySelector(s);
   q('#mapTitle').textContent=L_('Devre Şehri','Circuit City');
   q('#mapSub').textContent=L_('Eli ile Elektrik Devrelerinin Temelleri · EHB 211 · Ders 1–8','Fundamentals of Circuit Theory with Eli · EHB 211 · Lectures 1–8');
-  q('#examTag').textContent=L_('📅 1. Ara sınav: 9 Kasım 2026','📅 Midterm 1: 9 November 2026');
   q('#mapFoot').innerHTML=L_('Duraklar sırayla ilerler ama istediğine atlayabilirsin. Her durakta: <b>Anlat → Dene → Sına</b>. · <a id="resetProg">İlerlemeyi sıfırla</a>','Stops go in order, but you can jump to any of them. At every stop: <b>Explain → Try → Test</b>. · <a id="resetProg">Reset progress</a>');
   q('#btnMap').textContent=L_('🗺️ Harita','🗺️ Map');
   q('#prev').textContent=L_('← Geri','← Back');
@@ -504,7 +509,13 @@ const saveProg=p=>{try{localStorage.setItem(SAVE,JSON.stringify(p))}catch(e){}};
 
 function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));window.scrollTo(0,0)}
 function cleanup(){cleanups.forEach(f=>{try{f()}catch(e){}});cleanups=[]}
-function openChapter(id){CH=CHAPTERS.find(c=>c.id===id);SI=0;ST={mist:0,done:{}};ctx={};show('lesson');renderStep()}
+function showSoon(){cleanup();renderMap();show('map');const m=document.createElement('div');m.className='modal';
+  m.innerHTML=`<div class="mcard soon"><div class="eli">${eliSVG('wow')}</div><h2>🚧 ${L_('Devamı gelecek…','To be continued…')}</h2>
+   <p>${L_('Eli şu an yeni devrelerin peşinde! ⚡ Yeni dersler geldikçe bu yol uzayacak.','Eli is off chasing new circuits! ⚡ This road grows as new lectures arrive.')}</p>
+   <p>${L_('O zamana kadar akımın bol, gerilimin dengeli olsun.','Until then, may your currents flow and your voltages stay balanced.')}<br><b>${L_('Kirchhoff seninle olsun! 🔁','May Kirchhoff be with you! 🔁')}</b></p>
+   <button class="btn pink" id="sOk">${L_('Haritaya dön 🗺️','Back to the map 🗺️')}</button></div>`;
+  document.body.appendChild(m);SFX.win();const close=()=>m.remove();m.querySelector('#sOk').onclick=close;m.addEventListener('click',e=>{if(e.target===m)close()})}
+function openChapter(id){if(id==='soon'){showSoon();return}CH=CHAPTERS.find(c=>c.id===id);SI=0;ST={mist:0,done:{}};ctx={};show('lesson');renderStep()}
 function renderStep(){
   cleanup();const st=CH.steps[SI];window.SUBCTX='';
   try{history.replaceState(null,'',location.pathname+location.search+'#'+CH.id+'-'+SI)}catch(e){}
@@ -2360,7 +2371,7 @@ const CHAPTERS=[
   say:L_(`📝 <b>Ders 6'daki soru!</b><br>a) Şekildeki devrenin tüm DC çalışma noktalarını belirle.<br>b) Birinin civarında lineer olmayan elemanın küçük işaret eşdeğerini bul.<br><br>Bu soruda gizli bir tuzak var, dikkat! 🕵️`,`📝 <b>The problem from Lecture 6!</b><br>a) Find all DC operating points of the circuit.<br>b) Find the small-signal equivalent of the nonlinear element around one of them.<br><br>There is a hidden trap in this one, careful! 🕵️`)}
  ]},
 /* ---------------- 10 ---------------- */
-{id:'c10',icon:'🔺',title:L_('Çok-Uçlular ve Tranzistör',`Multiterminal Elements and Transistors`),sub:L_('Ders 7',`Lecture 7`),pos:[12,78],steps:[
+{id:'c10',icon:'🔺',title:L_('Çok-Uçlular ve Tranzistör',`Multiterminal Elements and Transistors`),sub:L_('Ders 7',`Lecture 7`),pos:[9,78],steps:[
  {type:'task',setup:chainTask({fig:circPort,steps:EX7A}),
   say:L_(`Ders 7, slayttaki Chua sorusu 📝: <b>şekildeki 2-kapılıların tanım bağıntısını bul.</b><br><br>Tarif hep aynı: <span class="k">KAY + KGY + ETB</span>. Kapılara gerilim kaynağı bağladığını düşün (v₁, v₂ bilinsin), üst düğümlerde KAY yaz → <b>gerilim kontrollü</b> gösterim i = G·v çıkar.`,`Lecture 7, the Chua problem from the slides 📝: <b>find the characterization of the two-ports in the figure.</b><br><br>The recipe is always the same: <span class="k">KCL + KVL + branch equations</span>. Imagine voltage sources at the ports (v₁, v₂ known), write KCL at the top nodes → the <b>voltage-controlled</b> representation i = G·v.`),
   formal:L_(`Lineer 2-kapılı: v = R·i (akım kontrollü), i = G·v (gerilim kontrollü).<br>g₁₁ = i₁/v₁ |<sub>v₂ = 0</sub>, g₂₁ = i₂/v₁ |<sub>v₂ = 0</sub> (2. kapı kısa devre) …<br><b>Karşıtlık:</b> sadece lineer dirençlerden oluşan 2-kapılıda G = Gᵀ (g₁₂ = g₂₁).`,`Linear two-port: v = R·i (current-controlled), i = G·v (voltage-controlled).<br>g₁₁ = i₁/v₁ |<sub>v₂ = 0</sub>, g₂₁ = i₂/v₁ |<sub>v₂ = 0</sub> (port 2 short-circuited) …<br><b>Reciprocity:</b> for a two-port made only of linear resistors, G = Gᵀ (g₁₂ = g₂₁).`)},
@@ -2397,7 +2408,7 @@ const CHAPTERS=[
   {q:L_('v̂₁ = 2î₁ + 4v̂₂, î₂ = −5î₁ hangi gösterim?',`v̂₁ = 2î₁ + 4v̂₂, î₂ = −5î₁: which representation?`),opts:[L_('Hibrit 1',`Hybrid 1`),L_('Akım kontrollü',`Current-controlled`),L_('Transmisyon 1',`Transmission 1`)],a:0,why:L_('Bağımsız büyüklükler î₁ (1. kapı akımı) ve v̂₂ (2. kapı gerilimi) → Hibrit 1.',`The independent variables are î₁ (port-1 current) and v̂₂ (port-2 voltage) → hybrid 1.`)}]}
 ]},
 /* ---------------- 11 ---------------- */
-{id:'c11',icon:'🔧',title:L_('Tranzistör DC ve Jakobiyen',`Transistor DC Analysis and the Jacobian`),sub:L_('Ders 8',`Lecture 8`),pos:[31,84],steps:[
+{id:'c11',icon:'🔧',title:L_('Tranzistör DC ve Jakobiyen',`Transistor DC Analysis and the Jacobian`),sub:L_('Ders 8',`Lecture 8`),pos:[26,84],steps:[
  {type:'talk',visual:vPWL,
   say:L_(`Ebers–Moll çok hassas ama elle hesap için ağır. Chua'nın tavsiyesi: <b>amaca uygun, en basit ama geçerli model</b>.<br><br><span class="k">Parça parça lineer model</span> (ortak emitör):<br>• b–e: E₀ ≈ 0.6–0.7 V gerilim kaynağı + ideal diyot D₁ → i<sub>b</sub>–v<sub>be</sub> eğrisi E₀'da dikey çizgi.<br>• c–e: β·i<sub>b</sub> AKAK + ideal diyot D₂ → i<sub>c</sub>–v<sub>ce</sub> eğrileri yatay çizgiler.`,`Ebers–Moll is very accurate but heavy for hand calculation. Chua's advice: <b>the simplest model that is still valid for the purpose</b>.<br><br><span class="k">Piecewise-linear model</span> (common emitter):<br>• b–e: E₀ ≈ 0.6–0.7 V voltage source + ideal diode D₁ → the i<sub>b</sub>–v<sub>be</sub> curve is a vertical line at E₀.<br>• c–e: β·i<sub>b</sub> CCCS + ideal diode D₂ → the i<sub>c</sub>–v<sub>ce</sub> curves are horizontal lines.`),
   formal:L_(`"Modeller belirli uygulamalar düşünülerek geliştirilir. Model ne kadar basitse analiz o kadar kolaydır." <small>(Chua–Desoer–Kuh)</small><br>Daha ayrıntılı model: (G₁, E₀) parça lineer diyot + µv<sub>ce</sub> GKGK ve (R₂, I₀) + βi<sub>b</sub>.`,`"Models are developed with specific applications in mind. The simpler the model, the easier the analysis." <small>(Chua–Desoer–Kuh)</small><br>A more detailed model: (G₁, E₀) piecewise-linear diode + µv<sub>ce</sub> VCVS, and (R₂, I₀) + βi<sub>b</sub>.`)},
@@ -2419,7 +2430,7 @@ const CHAPTERS=[
   {q:L_('Küçük işaret eşdeğerinde 10 V\'luk DC kaynak ne olur?',`What happens to the 10 V DC source in the small-signal equivalent?`),opts:[L_('Kısa devre',`Short circuit`),L_('Açık devre',`Open circuit`),L_('Aynen kalır',`Stays as it is`)],a:0,why:L_('Değeri sıfırlanır: v = 0 → kısa devre. (DC akım kaynağı → açık devre.)',`Its value is zeroed: v = 0 → short circuit. (DC current source → open circuit.)`)}]}
 ]},
 /* ---------------- 12 ---------------- */
-{id:'c12',icon:'🔼',title:L_('İşlemsel Kuvvetlendirici',`Operational Amplifiers`),sub:L_('Ders 8',`Lecture 8`),pos:[50,77],steps:[
+{id:'c12',icon:'🔼',title:L_('İşlemsel Kuvvetlendirici',`Operational Amplifiers`),sub:L_('Ders 8',`Lecture 8`),pos:[43,77],steps:[
  {type:'talk',visual:vOpamp,
   say:L_(`<b>İşlemsel kuvvetlendirici</b> (op-amp): girişler n (−, eviren) ve p (+, evirmeyen), çıkış o. Besleme kaynakları E₊, E₋ içeride sayılıp dış toprak referans alınınca <b>4-uçlu</b> bir eleman olur.<br><br>ETB: i<sub>n</sub> = I<sub>Bn</sub>, i<sub>p</sub> = I<sub>Bp</sub> (baz akımları, çok küçük), v<sub>o</sub> = f(v<sub>d</sub>), v<sub>d</sub> = v<sub>p</sub> − v<sub>n</sub>.<br><br>Gerçek eğrinin eğimi A ≈ 200 000! İdeal modele geç ve farkı gör.`,`<b>Operational amplifier</b> (op amp): inputs n (−, inverting) and p (+, noninverting), output o. With the supplies E₊, E₋ absorbed into the device and the external ground as datum, it is a <b>4-terminal</b> element.<br><br>Branch equations: i<sub>n</sub> = I<sub>Bn</sub>, i<sub>p</sub> = I<sub>Bp</sub> (bias currents, very small), v<sub>o</sub> = f(v<sub>d</sub>), v<sub>d</sub> = v<sub>p</sub> − v<sub>n</sub>.<br><br>The slope of the real curve is A ≈ 200 000! Switch to the ideal model and see the difference.`),
   formal:L_(`<b>İdeal op-amp:</b> i<sub>n</sub> = 0, i<sub>p</sub> = 0, v<sub>o</sub> = E<sub>sat</sub>·|v<sub>d</sub>|/v<sub>d</sub> (v<sub>d</sub> ≠ 0), −E<sub>sat</sub> &lt; v<sub>o</sub> &lt; E<sub>sat</sub> (v<sub>d</sub> = 0).<br><b>Lineer çalışma bölgesi:</b> i<sub>n</sub> = 0, i<sub>p</sub> = 0, v<sub>p</sub> − v<sub>n</sub> = 0, −E<sub>sat</sub> &lt; v<sub>o</sub> &lt; E<sub>sat</sub>.`,`<b>Ideal op amp:</b> i<sub>n</sub> = 0, i<sub>p</sub> = 0, v<sub>o</sub> = E<sub>sat</sub>·|v<sub>d</sub>|/v<sub>d</sub> (v<sub>d</sub> ≠ 0), −E<sub>sat</sub> &lt; v<sub>o</sub> &lt; E<sub>sat</sub> (v<sub>d</sub> = 0).<br><b>Linear region:</b> i<sub>n</sub> = 0, i<sub>p</sub> = 0, v<sub>p</sub> − v<sub>n</sub> = 0, −E<sub>sat</sub> &lt; v<sub>o</sub> &lt; E<sub>sat</sub>.`)},
@@ -2442,7 +2453,7 @@ const CHAPTERS=[
   {q:L_('İdeal op-amp ETB matrisinde M\'nin i<sub>o</sub> sütunu hep sıfır. Anlamı?',`In the ideal op amp's branch-equation matrix, the i<sub>o</sub> column of M is always zero. Meaning?`),opts:[L_('i<sub>o</sub> hiçbir denklemde yok: çıkış gereken akımı verir',`i<sub>o</sub> appears in no equation: the output supplies whatever current is needed`),'i<sub>o</sub> = 0',L_('Çıkış açık devre',`The output is an open circuit`)],a:0,why:L_('Çıkış akımını dış devre belirler (KAY), op-amp kısıtlamaz.',`The output current is set by the external circuit (KCL); the op amp does not constrain it.`)}]}
 ]},
 /* ---------------- 13 ---------------- */
-{id:'c13',icon:'🧭',title:L_('Lineer Cebir Köprüsü',`Linear Algebra Bridge`),sub:L_('EDT ↔ lineer cebir',`circuits ↔ linear algebra`),pos:[69,84],steps:[
+{id:'c13',icon:'🧭',title:L_('Lineer Cebir Köprüsü',`Linear Algebra Bridge`),sub:L_('EDT ↔ lineer cebir',`circuits ↔ linear algebra`),pos:[60,84],steps:[
  {type:'talk',visual:vLAmap,mood:'wow',
   say:L_(`Bu durak dersin <b>gizli iskeletini</b> gösteriyor 🦴 Ders 1–4'te yaptığın her şey aslında lineer cebir!<br><br>Bir devredeki ne tane akımı alt alta yaz: bu bir <b>vektör</b>, i ∈ ℝ<sup>ne</sup>. Gerilimler de öyle. KAY, KGY ve Tellegen bu vektörler hakkında <b>geometrik</b> cümleler kuruyor:<br>• KAY → i, A'nın <span class="k">boş uzayında</span><br>• KGY → v, Aᵀ'nin <span class="k">sütun uzayında</span><br>• Tellegen → bu iki uzay <span class="k">dik</span><br><br>"Neden nd − 1 bağımsız denklem?" sorusunun cevabı da burada: <b>rank</b>.`,`This stop shows the <b>hidden skeleton</b> of the course 🦴 Everything you did in Lectures 1–4 is actually linear algebra!<br><br>Stack the ne currents of a circuit: that is a <b>vector</b>, i ∈ ℝ<sup>ne</sup>. The voltages too. KCL, KVL and Tellegen make <b>geometric</b> statements about these vectors:<br>• KCL → i lies in the <span class="k">null space</span> of A<br>• KVL → v lies in the <span class="k">column space</span> of Aᵀ<br>• Tellegen → these two spaces are <span class="k">orthogonal</span><br><br>The answer to "why nd − 1 independent equations?" is here too: <b>rank</b>.`),
   formal:L_(`<b>Boş uzay:</b> N(A) = { x : A·x = 0 }. <b>Sütun uzayı:</b> R(Aᵀ) = { Aᵀe : e ∈ ℝ<sup>nd−1</sup> }.<br><b>Rank:</b> lineer bağımsız satır (= sütun) sayısı.<br><b>Rank–sıfırlık:</b> m × n matris için rank A + dim N(A) = n.`,`<b>Null space:</b> N(A) = { x : A·x = 0 }. <b>Column space:</b> R(Aᵀ) = { Aᵀe : e ∈ ℝ<sup>nd−1</sup> }.<br><b>Rank:</b> the number of linearly independent rows (= columns).<br><b>Rank–nullity:</b> for an m × n matrix, rank A + dim N(A) = n.`)},
@@ -2472,7 +2483,7 @@ const CHAPTERS=[
   {q:L_('B·Qᵀ = 0 ne anlatır?',`What does B·Qᵀ = 0 express?`),opts:[L_('Çevre uzayı ile kesitleme uzayı dik: ℝ<sup>ne</sup> = R(Aᵀ) ⊕ N(A)',`The loop space and cut-set space are orthogonal: ℝ<sup>ne</sup> = R(Aᵀ) ⊕ N(A)`),'B = Q',L_('Q tersinir',`Q is invertible`)],a:0,why:L_('B\'nin satırları N(A)\'yı, Q\'nunkiler R(Aᵀ)\'yı gerer; çarpımın sıfır olması dikliktir.',`The rows of B span N(A), those of Q span R(Aᵀ); a zero product means orthogonality.`)}]}
 ]},
 /* ---------------- 14 ---------------- */
-{id:'c14',icon:'🧮',title:L_('Düğüm Gerilimleri Yöntemi',`Node Analysis`),sub:L_('Ders 8',`Lecture 8`),pos:[88,78],steps:[
+{id:'c14',icon:'🧮',title:L_('Düğüm Gerilimleri Yöntemi',`Node Analysis`),sub:L_('Ders 8',`Lecture 8`),pos:[77,78],steps:[
  {type:'talk',visual:vNodeFlow,
   say:L_(`Ders 8'in son konusu: <b>Lineer Direnç Devreleri</b> ve <b>Genelleştirilmiş Düğüm Gerilimleri Yöntemi</b> 🧮<br><br>Elimizde 2ne bilinmeyen (v, i) ve 2ne denklem var. Hepsini aynı anda çözmek yorucu.<br><br>Hile: KGY'yi <span class="k">v = Aᵀe</span> biçiminde kullan. O zaman nd − 1 tane e her şeyi belirler: e → v → (ETB) → i. Geriye sadece A·i = 0 kalır: <b>nd − 1 denklem, nd − 1 bilinmeyen</b>.`,`The last topic of Lecture 8: <b>Linear Resistive Circuits</b> and <b>Generalized Node Analysis</b> 🧮<br><br>We have 2ne unknowns (v, i) and 2ne equations. Solving them all at once is tiring.<br><br>The trick: use KVL in the form <span class="k">v = Aᵀe</span>. Then the nd − 1 node voltages e determine everything: e → v → (branch eqs) → i. Only A·i = 0 remains: <b>nd − 1 equations, nd − 1 unknowns</b>.`),
   formal:L_(`Lineer, zamanla değişmeyen direnç elemanları + bağımsız kaynaklar.<br><b>Yararlanılacaklar:</b> KAY A·i = 0 (nd − 1), KGY B·v = 0 (ne − nd + 1), ETB M·v + N·i = w (ne). Bilinmeyen: v, i (2ne).<br>v = Aᵀe: "düğüm gerilimleri → tüm eleman gerilimleri"; M·v + N·i = w: "→ tüm eleman akımları". <small>(Chua–Desoer–Kuh sf. 214–223)</small>`,`Linear time-invariant resistive elements + independent sources.<br><b>Tools:</b> KCL A·i = 0 (nd − 1), KVL B·v = 0 (ne − nd + 1), branch eqs M·v + N·i = w (ne). Unknowns: v, i (2ne).<br>v = Aᵀe: "node voltages → all branch voltages"; M·v + N·i = w: "→ all branch currents". <small>(Chua–Desoer–Kuh pp. 214–223)</small>`)},
@@ -2500,7 +2511,9 @@ const CHAPTERS=[
   {q:L_('Referans satırını silmeden Ĝₐ = AₐG<sub>d</sub>Aₐᵀ kurarsak?',`What if we build Ĝₐ = AₐG<sub>d</sub>Aₐᵀ without deleting the datum row?`),opts:[L_('Satır toplamları 0 → tekil, tek çözüm yok',`Zero row sums → singular, no unique solution`),L_('Daha doğru sonuç',`A more accurate result`),L_('Aynı çözüm',`The same solution`)],a:0,why:L_('Aₐ\'nın satırları bağımlı; (1, …, 1) vektörü Ĝₐ\'nın boş uzayında.',`The rows of Aₐ are dependent; the vector (1, …, 1) is in the null space of Ĝₐ.`)},
   {q:L_('Kaynaklar 10 A ve sin t ise e(t) neden e<sub>DC</sub> + e<sub>s</sub> sin t biçiminde?',`With sources 10 A and sin t, why is e(t) of the form e<sub>DC</sub> + e<sub>s</sub> sin t?`),opts:[L_('Lineerlik (süperpozisyon): e = Ĝ<sup>−1</sup>i<sub>b</sub>, i<sub>b</sub>\'ye lineer bağlı',`Linearity (superposition): e = Ĝ<sup>−1</sup>i<sub>b</sub> depends linearly on i<sub>b</sub>`),L_('Tesadüf',`Coincidence`),L_('Sadece DC kaynak etkili',`Only the DC source matters`)],a:0,why:L_('Lineer dönüşüm toplamı toplama, katı katına götürür.',`A linear map takes sums to sums and multiples to multiples.`)},
   {q:L_('Düğüm gerilimleri bulununca eleman gerilimleri nasıl bulunur?',`Once the node voltages are known, how are the branch voltages found?`),opts:['v = Aᵀe','v = Ae','v = Ĝe'],a:0,why:L_('KGY: her çizginin gerilimi = kuyruk düğümünün gerilimi − uç düğümünün gerilimi.',`KVL: each branch voltage = voltage of its tail node − voltage of its head node.`)}]}
-]}
+]},
+/* ---------------- devamı gelecek (her zaman en sonda kalsın) ---------------- */
+{id:'soon',soon:true,icon:'🚧',title:L_('Devamı Gelecek…','To Be Continued…'),sub:L_('Yeni dersler yolda','More lectures on the way'),pos:[93,85],steps:[]}
 
 ];
 
@@ -2575,9 +2588,9 @@ function renderMap(){const p=prog();const box=$('#mapbox');
    ${house(160,782,'#ffe08a')}${house(590,786,'#9fd8ff')}${house(820,790,'#ffd3e6')}${chip(975,270)}${chip(30,270)}${chip(975,520)}${chip(30,560)}
    <path d="${path}" stroke="#fff" stroke-width="26" fill="none" stroke-linecap="round"/>
    <path d="${path}" stroke="#c9b9f5" stroke-width="6" fill="none" stroke-dasharray="2 16" stroke-linecap="round"/>
-  </svg>`+CHAPTERS.map(c=>{const s=(p[c.id]||{}).stars||0;return `<button class="stop" data-c="${c.id}" style="left:${c.pos[0]}%;top:${c.pos[1]}%">
+  </svg>`+CHAPTERS.map(c=>{const s=(p[c.id]||{}).stars||0;return `<button class="stop${c.soon?' soonstop':''}" data-c="${c.id}" style="left:${c.pos[0]}%;top:${c.pos[1]}%">
     <div class="disc" style="${s?'border-color:#ffe08a':''}">${c.icon}</div><div class="lbl">${c.title}<small>${c.sub}</small></div>
-    <div class="stars">${[1,2,3].map(i=>i<=s?'<b>★</b>':'★').join('')}</div></button>`}).join('');
+    ${c.soon?'<div class="stars soonDots">• • •</div>':`<div class="stars">${[1,2,3].map(i=>i<=s?'<b>★</b>':'★').join('')}</div>`}</button>`}).join('');
   box.querySelectorAll('.stop').forEach(b=>b.onclick=()=>{SFX.click();openChapter(b.dataset.c)});
 }
 $('#resetProg').onclick=()=>{if(confirm(L_('Tüm yıldızlar silinsin mi?',`Delete all stars?`))){localStorage.removeItem(SAVE);renderMap()}};
