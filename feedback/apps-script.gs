@@ -1,3 +1,5 @@
+/** @OnlyCurrentDoc  — script yalnızca bağlı olduğu bu E-Tabloya erişebilir (izinleri daraltır). */
+
 /**
  * Devre Şehri — geri bildirim sunucusu (Google Apps Script)
  *
