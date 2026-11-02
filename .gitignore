@@ -1,0 +1,7 @@
+# Hocanın slaytları herkese açık depoya konmaz
+*.pptx
+*.ppt
+*.pdf
+# geçici test dosyaları
+_m_*.html
+test*.html
